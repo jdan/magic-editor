@@ -1,8 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-
 import dedent from "dedent";
+import { Diff, diff_match_patch as DiffMatchPatch } from "diff-match-patch";
 import { Configuration, OpenAIApi } from "openai";
+
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -14,13 +15,14 @@ interface Request extends NextApiRequest {
   };
 }
 
-type Data = {
+export type ImproveResponse = {
   improvement: string;
+  diff: Diff[];
 };
 
 export default async function handler(
   req: Request,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<ImproveResponse>
 ) {
   const { text } = req.body;
 
@@ -41,8 +43,14 @@ export default async function handler(
     ],
   });
 
+  const improvement =
+    completion.data.choices[0].message?.content ?? "[empty response]";
+
+  const dmp = new DiffMatchPatch();
+  const diff = dmp.diff_main(text, improvement);
+
   res.status(200).json({
-    improvement:
-      completion.data.choices[0].message?.content ?? "[empty response]",
+    improvement,
+    diff,
   });
 }
