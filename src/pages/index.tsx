@@ -155,7 +155,7 @@ function CopyButton(props: { text: string }) {
   return (
     <button
       type="button"
-      className="absolute top-0 right-0 px-2 py-2 text-gray-500 text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+      className="absolute top-0 right-0 px-2 py-2 text-gray-500 text-xs opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
       onClick={() => {
         setCopyLabel("Copied!");
         setTimeout(() => setCopyLabel("Copy"), 1000);
