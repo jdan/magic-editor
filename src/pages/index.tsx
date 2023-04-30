@@ -104,15 +104,15 @@ export default function App() {
           <div className="text-blue-300">⌘+⏎</div>
         </button>
 
-        {mode === "text-only" ? (
-          <div className="whitespace-pre-wrap	w-full min-h-[8rem] p-4 border border-gray-300 rounded-md">
-            {response.improvement}
-          </div>
-        ) : (
-          <div className="whitespace-pre-wrap	w-full min-h-[8rem] p-4 border border-gray-300 rounded-md">
+        <div className="relative group whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md">
+          {mode === "text-only" ? (
+            response.improvement
+          ) : (
             <Diff diff={response.diff} mode={mode} />
-          </div>
-        )}
+          )}
+
+          <CopyButton text={response.improvement} />
+        </div>
 
         {/* a segmented control to switch between modes */}
         <div className="flex gap-px">
@@ -146,6 +146,24 @@ export default function App() {
         </div>
       </form>
     </main>
+  );
+}
+
+function CopyButton(props: { text: string }) {
+  const [copyLabel, setCopyLabel] = useState<string>("Copy");
+
+  return (
+    <button
+      type="button"
+      className="absolute top-0 right-0 px-2 py-2 text-gray-500 text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+      onClick={() => {
+        setCopyLabel("Copied!");
+        setTimeout(() => setCopyLabel("Copy"), 1000);
+        navigator.clipboard.writeText(props.text);
+      }}
+    >
+      {copyLabel}
+    </button>
   );
 }
 
