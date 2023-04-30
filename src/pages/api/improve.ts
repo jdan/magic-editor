@@ -52,6 +52,7 @@ export default async function handler(
 
   const dmp = new DiffMatchPatch();
   const diff = dmp.diff_main(text, improvement);
+  dmp.diff_cleanupSemantic(diff);
 
   res.status(200).json({
     improvement,
