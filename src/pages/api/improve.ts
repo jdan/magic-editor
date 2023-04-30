@@ -12,6 +12,7 @@ const openai = new OpenAIApi(configuration);
 interface Request extends NextApiRequest {
   body: {
     text: string;
+    instructions: string;
   };
 }
 
@@ -24,7 +25,7 @@ export default async function handler(
   req: Request,
   res: NextApiResponse<ImproveResponse>
 ) {
-  const { text } = req.body;
+  const { text, instructions } = req.body;
 
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
@@ -33,9 +34,12 @@ export default async function handler(
         role: "user",
         content: dedent`
           You are an assistant helping to improve my writing.
+          Do not use quotes.
           Output the user's text with:
-          - Improved spelling and grammar
-          - Correct punctuation
+          ${instructions
+            .split("\n")
+            .map((i) => `- ${i}`)
+            .join("\n")}
 
           Text: ${text}
         `,

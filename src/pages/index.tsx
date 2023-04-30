@@ -5,12 +5,17 @@ import { Diff } from "diff-match-patch";
 type Mode = "text-only" | "diff" | "diff-overwrite";
 
 export default function App() {
-  const [text, setText] = useState<string>("");
+  const [text, setText] = useState<string>("Helo world!1");
 
   const [response, setResponse] = useState<ImproveResponse>({
     improvement: "",
     diff: [],
   });
+
+  const [showInstructions, setShowInstructions] = useState<boolean>(false);
+  const [instructions, setInstructions] = useState<string>(
+    ["Improved spelling and grammar", "Correct punctuation"].join("\n")
+  );
 
   const [mode, setMode] = useState<Mode>("text-only");
 
@@ -27,7 +32,7 @@ export default function App() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ text, instructions }),
       });
 
       const response = await res.json();
@@ -35,7 +40,7 @@ export default function App() {
 
       setLoading(false);
     },
-    [text]
+    [text, instructions]
   );
 
   const handleKeyDown = useCallback(
@@ -47,6 +52,11 @@ export default function App() {
     [handleSubmit]
   );
 
+  const handleInstructionsToggle = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowInstructions((prev) => !prev);
+  }, []);
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen py-2">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-96">
@@ -56,20 +66,50 @@ export default function App() {
           onChange={(e) => setText(e.target.value)}
           onKeyDown={handleKeyDown}
         />
+
+        <button
+          className="flex py-1 gap-2"
+          type="button"
+          onClick={handleInstructionsToggle}
+        >
+          <span
+            className={`transition-transform ${
+              showInstructions ? "rotate-90" : ""
+            }`}
+          >
+            ▶
+          </span>
+          Instructions
+        </button>
+        {showInstructions && (
+          <div className="flex flex-col gap-2">
+            <p className="text-gray-500 text-sm">
+              Explain your desired output. One instruction per line.
+            </p>
+            <textarea
+              className="w-full h-32 p-4 border border-gray-300 rounded-md"
+              value={instructions}
+              onChange={(e) => setInstructions(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+          </div>
+        )}
+
         <button
           type="submit"
-          className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
+          className="flex flex-row justify-center gap-2 items-center px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
           disabled={loading}
         >
           {loading ? "Loading..." : "Improve"}
+          <div className="text-blue-300">⌘+⏎</div>
         </button>
 
         {mode === "text-only" ? (
-          <div className="w-full h-32 p-4 border border-gray-300 rounded-md">
+          <div className="whitespace-pre-wrap	w-full min-h-[8rem] p-4 border border-gray-300 rounded-md">
             {response.improvement}
           </div>
         ) : (
-          <div className="w-full h-32 p-4 border border-gray-300 rounded-md">
+          <div className="whitespace-pre-wrap	w-full min-h-[8rem] p-4 border border-gray-300 rounded-md">
             <Diff diff={response.diff} mode={mode} />
           </div>
         )}
@@ -113,7 +153,8 @@ function Diff(props: { diff: Diff[]; mode: "diff" | "diff-overwrite" }) {
   const additionClassName =
     props.mode === "diff"
       ? "bg-green-200"
-      : "bg-yellow-200 border-b-2 border-b-yellow-400";
+      : "bg-yellow-200 underline decoration-yellow-400";
+  const deletionClassName = "bg-red-200";
 
   return (
     <div>
@@ -121,7 +162,7 @@ function Diff(props: { diff: Diff[]; mode: "diff" | "diff-overwrite" }) {
         if (props.mode === "diff-overwrite" && d[0] === -1) return null;
 
         const style =
-          d[0] === 1 ? additionClassName : d[0] === -1 ? "bg-red-200" : "";
+          d[0] === 1 ? additionClassName : d[0] === -1 ? deletionClassName : "";
         return (
           <span key={i} className={style}>
             {d[1]}
