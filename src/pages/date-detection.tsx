@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { DetectionResponse } from "./api/date-detection";
 
 export default function App() {
@@ -6,7 +6,40 @@ export default function App() {
 
   const [response, setResponse] = useState<DetectionResponse>({
     detection: "",
+    text: "",
   });
+
+  const extractedDate = useMemo(() => {
+    try {
+      const { date, start, end } = JSON.parse(response.detection);
+      return (
+        <div className="flex flex-col gap-2">
+          <div>
+            {response.text.slice(0, start)}
+            <span className="bg-blue-200">
+              {response.text.slice(start, end)}
+            </span>
+            {response.text.slice(end)}
+          </div>
+
+          <div>
+            Detected date:{" "}
+            <span className="text-blue-400">
+              {/* date in the format Day of week, Month Day, Year */}
+              {new Date(date).toLocaleDateString("en-US", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </span>
+          </div>
+        </div>
+      );
+    } catch (error) {
+      return null;
+    }
+  }, [response]);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -59,8 +92,18 @@ export default function App() {
           <div className="text-blue-300">⌘+⏎</div>
         </button>
 
-        <div className="relative group whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md">
-          {response.detection}
+        <div className="whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md">
+          {extractedDate ?? (
+            <div className="text-gray-400">No date detected</div>
+          )}
+        </div>
+
+        <div className="relative group whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md font-mono">
+          {response.detection ? (
+            response.detection
+          ) : (
+            <div className="text-gray-400">No response</div>
+          )}
           <CopyButton text={response.detection} />
         </div>
       </form>
