@@ -47,7 +47,7 @@ export default function App() {
           <div className="relative group flex flex-col items-start gap-2 whitespace-pre-wrap w-full p-4 border border-gray-300 rounded-md">
             <div>
               Detected date:{" "}
-              <span className="bg-blue-100 rounded-sm p-1">
+              <span className="bg-blue-100 rounded-sm p-px">
                 {formattedString}
               </span>
             </div>
