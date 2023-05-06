@@ -80,7 +80,7 @@ export default async function handler(
       {
         role: "user",
         content: dedent`
-          You are an assistant helping to extract dates from plain text.
+          You are an assistant helping to extract a single date from plain text.
           You will receive the current date and some text.
           You will a JSON object containing the annotated text and the extracted date.
         `,

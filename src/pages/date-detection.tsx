@@ -13,31 +13,49 @@ export default function App() {
     try {
       const { annotated, date } = JSON.parse(response.detection);
 
+      let numMatches = 0;
+      const annotatedHtml = (annotated as string).replace(
+        /{{(.+?)}}/g,
+        (_, match) => {
+          if (numMatches > 0) {
+            return match;
+          }
+
+          numMatches++;
+          return `<span class="bg-blue-100 rounded-sm p-px">${match}</span>`;
+        }
+      );
+
       return (
         <>
           <div className="whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md">
             <div
               dangerouslySetInnerHTML={{
-                __html: (annotated as string).replace(
-                  /{{(.+?)}}/g,
-                  (_, match) =>
-                    `<span class="bg-blue-100 rounded-sm p-px">${match}</span>`
-                ),
+                __html: annotatedHtml,
               }}
             />
           </div>
 
-          <div className="whitespace-pre-wrap w-full p-4 border border-gray-300 rounded-md">
-            Detected date:{" "}
-            <span className="text-blue-500">
-              {/* date in the format Day of week, Month Day, Year */}
-              {new Date(date).toLocaleDateString("en-US", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </span>
+          <div className="flex flex-col items-start gap-2 whitespace-pre-wrap w-full p-4 border border-gray-300 rounded-md">
+            <div>
+              Detected date:{" "}
+              <span className="bg-blue-100 rounded-sm p-1">
+                {/* date in the format Day of week, Month Day, Year */}
+                {new Date(date).toLocaleDateString("en-US", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </span>
+            </div>
+            <input
+              type="date"
+              value={
+                // date in the format YYYY-MM-DD
+                new Date(date).toISOString().split("T")[0]
+              }
+            />
           </div>
         </>
       );
@@ -94,20 +112,27 @@ export default function App() {
           className="flex flex-row justify-center gap-2 items-center px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
           disabled={loading}
         >
-          {loading ? "Loading..." : "Detect"}
+          {loading ? "Loading..." : "Detect date"}
           <div className="text-blue-300">⌘+⏎</div>
         </button>
 
-        {extractedDate ?? <div className="text-gray-400">No date detected</div>}
-
-        <div className="relative group whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md font-mono">
-          {response.detection ? (
-            response.detection
-          ) : (
-            <div className="text-gray-400">No response</div>
-          )}
-          <CopyButton text={response.detection} />
-        </div>
+        {extractedDate && response.detection ? (
+          <>
+            {extractedDate}
+            <div className="relative group whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md font-mono">
+              {response.detection ? (
+                response.detection
+              ) : (
+                <div className="text-gray-400">No response</div>
+              )}
+              <CopyButton text={response.detection} />
+            </div>
+          </>
+        ) : (
+          <div className="relative group whitespace-pre-wrap w-full p-4 border border-gray-300 rounded-md text-gray-400">
+            No date detected
+          </div>
+        )}
       </form>
     </main>
   );
