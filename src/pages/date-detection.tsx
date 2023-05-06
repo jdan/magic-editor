@@ -26,6 +26,14 @@ export default function App() {
         }
       );
 
+      // date in the format Day of week, Month Day, Year
+      const formattedString = new Date(date).toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+
       return (
         <>
           <div className="whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md">
@@ -36,17 +44,11 @@ export default function App() {
             />
           </div>
 
-          <div className="flex flex-col items-start gap-2 whitespace-pre-wrap w-full p-4 border border-gray-300 rounded-md">
+          <div className="relative group flex flex-col items-start gap-2 whitespace-pre-wrap w-full p-4 border border-gray-300 rounded-md">
             <div>
               Detected date:{" "}
               <span className="bg-blue-100 rounded-sm p-1">
-                {/* date in the format Day of week, Month Day, Year */}
-                {new Date(date).toLocaleDateString("en-US", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
+                {formattedString}
               </span>
             </div>
             <input
@@ -56,6 +58,7 @@ export default function App() {
                 new Date(date).toISOString().split("T")[0]
               }
             />
+            <CopyButton text={formattedString} />
           </div>
         </>
       );
