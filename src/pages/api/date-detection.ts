@@ -26,27 +26,25 @@ const EXAMPLES = [
     currentDate: "Saturday, May 6, 2023",
     text: "I was born on 12/31/1999",
     output: {
+      annotated: "I was born on {{12/31/1999}}",
       date: "1999/12/31",
-      start: 14,
-      end: 26,
     },
   },
   {
     currentDate: "Saturday, May 6, 2023",
     text: "Remind me to take out the trash on Tuesday.",
     output: {
+      annotated: "Remind me to take out the trash on {{Tuesday}}.",
       date: "2023/05/10",
-      start: 35,
-      end: 42,
     },
   },
   {
     currentDate: "Saturday, May 6, 2023",
     text: "Next friday I will write a paper on the history of Wednesday",
     output: {
+      annotated:
+        "{{Next friday}} I will write a paper on the history of Wednesday",
       date: "2023/05/12",
-      start: 0,
-      end: 11,
     },
   },
 ];
@@ -63,9 +61,8 @@ const exampleTranscript = EXAMPLES.flatMap(({ currentDate, text, output }) => [
     role: "assistant" as const,
     content: dedent`
       {
-        "date": "${output.date}",
-        "start": ${output.start},
-        "end": ${output.end}
+        "annotated": "${output.annotated}",
+        "date": "${output.date}"
       }
     `,
   },
@@ -85,9 +82,7 @@ export default async function handler(
         content: dedent`
           You are an assistant helping to extract dates from plain text.
           You will receive the current date and some text.
-          You will output a JSON object with the date and the start and end indices of the date in the text.
-          The date should be in the format YYYY/MM/DD.
-          The start and end indices should be 0-indexed.
+          You will a JSON object containing the annotated text and the extracted date.
         `,
       },
       ...exampleTranscript,

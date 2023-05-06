@@ -11,20 +11,25 @@ export default function App() {
 
   const extractedDate = useMemo(() => {
     try {
-      const { date, start, end } = JSON.parse(response.detection);
+      const { annotated, date } = JSON.parse(response.detection);
+
       return (
-        <div className="flex flex-col gap-2">
-          <div>
-            {response.text.slice(0, start)}
-            <span className="bg-blue-200">
-              {response.text.slice(start, end)}
-            </span>
-            {response.text.slice(end)}
+        <>
+          <div className="whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md">
+            <div
+              dangerouslySetInnerHTML={{
+                __html: (annotated as string).replace(
+                  /{{(.+?)}}/g,
+                  (_, match) =>
+                    `<span class="bg-blue-100 rounded-sm p-px">${match}</span>`
+                ),
+              }}
+            />
           </div>
 
-          <div>
+          <div className="whitespace-pre-wrap w-full p-4 border border-gray-300 rounded-md">
             Detected date:{" "}
-            <span className="text-blue-400">
+            <span className="text-blue-500">
               {/* date in the format Day of week, Month Day, Year */}
               {new Date(date).toLocaleDateString("en-US", {
                 weekday: "long",
@@ -34,9 +39,10 @@ export default function App() {
               })}
             </span>
           </div>
-        </div>
+        </>
       );
     } catch (error) {
+      console.error(error);
       return null;
     }
   }, [response]);
@@ -92,11 +98,7 @@ export default function App() {
           <div className="text-blue-300">⌘+⏎</div>
         </button>
 
-        <div className="whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md">
-          {extractedDate ?? (
-            <div className="text-gray-400">No date detected</div>
-          )}
-        </div>
+        {extractedDate ?? <div className="text-gray-400">No date detected</div>}
 
         <div className="relative group whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md font-mono">
           {response.detection ? (
