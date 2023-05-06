@@ -122,7 +122,7 @@ export default function App() {
         {extractedDate && response.detection ? (
           <>
             {extractedDate}
-            <div className="relative group whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md font-mono">
+            <div className="relative group whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md font-mono text-sm">
               {response.detection ? (
                 response.detection
               ) : (

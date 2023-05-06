@@ -56,6 +56,14 @@ const EXAMPLES = [
       date: "2023/07/04",
     },
   },
+  {
+    currentDate: "Saturday, May 6, 2023",
+    text: "I was so tired last night",
+    output: {
+      annotated: "I was so tired {{last night}}",
+      date: "2023/05/05",
+    },
+  },
 ];
 
 const exampleTranscript = EXAMPLES.flatMap(({ currentDate, text, output }) => [
