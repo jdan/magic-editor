@@ -1,0 +1,114 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CopyEditor matches snapshot 1`] = `
+<main
+  className="flex flex-col items-center justify-center min-h-screen py-2"
+>
+  <form
+    className="flex flex-col gap-4 w-96"
+    onSubmit={[Function]}
+  >
+    <textarea
+      className="w-full h-32 p-4 border border-gray-300 rounded-md"
+      onChange={[Function]}
+      onKeyDown={[Function]}
+      value="Helo world!1"
+    />
+    <button
+      className="flex py-1 gap-2"
+      onClick={[Function]}
+      type="button"
+    >
+      <span
+        className="transition-transform "
+      >
+        ▶
+      </span>
+      Instructions
+    </button>
+    <button
+      className="flex flex-row justify-center gap-2 items-center px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
+      disabled={false}
+      type="submit"
+    >
+      Improve
+      <div
+        className="text-blue-300"
+      >
+        ⌘+⏎
+      </div>
+    </button>
+    <div
+      className="relative group whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md"
+    >
+      <button
+        className="absolute top-0 right-0 px-2 py-2 text-gray-500 text-xs opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+        onClick={[Function]}
+        type="button"
+      >
+        Copy
+      </button>
+    </div>
+    <div
+      className="flex gap-px"
+    >
+      <button
+        className="px-4 py-2 text-white rounded-l-md bg-blue-500"
+        onClick={[Function]}
+        type="button"
+      >
+        Text
+      </button>
+      <button
+        className="px-4 py-2 text-white bg-gray-300"
+        onClick={[Function]}
+        type="button"
+      >
+        Diff
+      </button>
+      <button
+        className="px-4 py-2 text-white rounded-r-md bg-gray-300"
+        onClick={[Function]}
+        type="button"
+      >
+        Over
+      </button>
+    </div>
+  </form>
+</main>
+`;
+
+exports[`DateDetection matches snapshot 1`] = `
+<main
+  className="flex flex-col items-center justify-center min-h-screen py-2"
+>
+  <form
+    className="flex flex-col gap-4 w-96"
+    onSubmit={[Function]}
+  >
+    <textarea
+      className="w-full h-32 p-4 border border-gray-300 rounded-md"
+      onChange={[Function]}
+      onKeyDown={[Function]}
+      value="stop by the post office wednesday"
+    />
+    <button
+      className="flex flex-row justify-center gap-2 items-center px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
+      disabled={false}
+      type="submit"
+    >
+      Detect date
+      <div
+        className="text-blue-300"
+      >
+        ⌘+⏎
+      </div>
+    </button>
+    <div
+      className="relative group whitespace-pre-wrap w-full p-4 border border-gray-300 rounded-md text-gray-400"
+    >
+      No date detected
+    </div>
+  </form>
+</main>
+`;
