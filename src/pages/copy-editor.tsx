@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { ImproveResponse } from "./api/improve";
 import { Diff } from "diff-match-patch";
+import { TextArea } from "@/components/TextArea";
 
 type Mode = "text-only" | "diff" | "diff-overwrite";
 
@@ -60,12 +61,7 @@ export default function App() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen py-2">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-96">
-        <textarea
-          className="w-full h-32 p-4 border border-gray-300 rounded-md"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
+        <TextArea value={text} onChange={setText} onKeyDown={handleKeyDown} />
 
         <button
           className="flex py-1 gap-2"
@@ -86,10 +82,10 @@ export default function App() {
             <p className="text-gray-500 text-sm">
               Explain your desired output. One instruction per line.
             </p>
-            <textarea
-              className="w-full h-32 p-4 border border-gray-300 rounded-md"
+
+            <TextArea
               value={instructions}
-              onChange={(e) => setInstructions(e.target.value)}
+              onChange={setInstructions}
               onKeyDown={handleKeyDown}
             />
           </div>

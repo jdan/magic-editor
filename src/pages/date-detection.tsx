@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { DetectionResponse } from "./api/date-detection";
+import { TextArea } from "@/components/TextArea";
 
 export default function App() {
   const [text, setText] = useState<string>("stop by the post office wednesday");
@@ -103,12 +104,7 @@ export default function App() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen py-2">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-96">
-        <textarea
-          className="w-full h-32 p-4 border border-gray-300 rounded-md"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
+        <TextArea value={text} onChange={setText} onKeyDown={handleKeyDown} />
 
         <button
           type="submit"
