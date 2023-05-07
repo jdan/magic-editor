@@ -10,64 +10,14 @@ export default function App() {
     text: "",
   });
 
-  const extractedDate = useMemo(() => {
+  const extraction = useMemo(() => {
     try {
-      const { annotated, date } = JSON.parse(response.detection);
-
-      let numMatches = 0;
-      const annotatedHtml = (annotated as string).replace(
-        /{{(.+?)}}/g,
-        (_, match) => {
-          if (numMatches > 0) {
-            return match;
-          }
-
-          numMatches++;
-          return `<span class="bg-blue-100 rounded-sm p-px">${match}</span>`;
-        }
-      );
-
-      // date in the format Day of week, Month Day, Year
-      const formattedString = new Date(date).toLocaleDateString("en-US", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
-
-      return (
-        <>
-          <div className="whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: annotatedHtml,
-              }}
-            />
-          </div>
-
-          <div className="relative group flex flex-col items-start gap-2 whitespace-pre-wrap w-full p-4 border border-gray-300 rounded-md">
-            <div>
-              Detected date:{" "}
-              <span className="bg-blue-100 rounded-sm p-px">
-                {formattedString}
-              </span>
-            </div>
-            <input
-              type="date"
-              value={
-                // date in the format YYYY-MM-DD
-                new Date(date).toISOString().split("T")[0]
-              }
-            />
-            <CopyButton text={formattedString} />
-          </div>
-        </>
-      );
+      return JSON.parse(response.detection) as ExtractionProps;
     } catch (error) {
       console.error(error);
       return null;
     }
-  }, [response]);
+  }, [response.detection]);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -115,9 +65,12 @@ export default function App() {
           <div className="text-blue-300">⌘+⏎</div>
         </button>
 
-        {extractedDate && response.detection ? (
+        {extraction ? (
           <>
-            {extractedDate}
+            <Extraction
+              annotated={extraction.annotated}
+              date={extraction.date}
+            />
             <div className="relative group whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md font-mono text-sm">
               {response.detection ? (
                 response.detection
@@ -134,6 +87,63 @@ export default function App() {
         )}
       </form>
     </main>
+  );
+}
+
+interface ExtractionProps {
+  annotated: string;
+  date: string;
+}
+
+export function Extraction(props: ExtractionProps) {
+  const { annotated, date } = props;
+
+  let numMatches = 0;
+  const annotatedHtml = (annotated as string).replace(
+    /{{(.+?)}}/g,
+    (_, match) => {
+      if (numMatches > 0) {
+        return match;
+      }
+
+      numMatches++;
+      return `<span class="bg-blue-100 rounded-sm p-px">${match}</span>`;
+    }
+  );
+
+  // date in the format Day of week, Month Day, Year
+  const formattedString = new Date(date).toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  return (
+    <>
+      <div className="whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md">
+        <div
+          dangerouslySetInnerHTML={{
+            __html: annotatedHtml,
+          }}
+        />
+      </div>
+
+      <div className="relative group flex flex-col items-start gap-2 whitespace-pre-wrap w-full p-4 border border-gray-300 rounded-md">
+        <div>
+          Detected date:{" "}
+          <span className="bg-blue-100 rounded-sm p-px">{formattedString}</span>
+        </div>
+        <input
+          type="date"
+          value={
+            // date in the format YYYY-MM-DD
+            new Date(date).toISOString().split("T")[0]
+          }
+        />
+        <CopyButton text={formattedString} />
+      </div>
+    </>
   );
 }
 

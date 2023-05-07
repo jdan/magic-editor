@@ -112,3 +112,43 @@ exports[`DateDetection matches snapshot 1`] = `
   </form>
 </main>
 `;
+
+exports[`Extraction matches snapshot 1`] = `
+[
+  <div
+    className="whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md"
+  >
+    <div
+      dangerouslySetInnerHTML={
+        {
+          "__html": "stop by the post office <span class="bg-blue-100 rounded-sm p-px">wednesday</span>",
+        }
+      }
+    />
+  </div>,
+  <div
+    className="relative group flex flex-col items-start gap-2 whitespace-pre-wrap w-full p-4 border border-gray-300 rounded-md"
+  >
+    <div>
+      Detected date:
+       
+      <span
+        className="bg-blue-100 rounded-sm p-px"
+      >
+        Wednesday, May 10, 2023
+      </span>
+    </div>
+    <input
+      type="date"
+      value="2023-05-10"
+    />
+    <button
+      className="absolute top-0 right-0 px-2 py-2 text-gray-500 text-xs opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+      onClick={[Function]}
+      type="button"
+    >
+      Copy
+    </button>
+  </div>,
+]
+`;
