@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function App() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen py-2 gap-8">
-      <h1 className="text-4xl font-bold text-center">Experiments</h1>
+      <h1 className="text-4xl font-bold text-center">magic-editor</h1>
 
       <div className="flex flex-col items-center justify-center gap-2">
         <Card
