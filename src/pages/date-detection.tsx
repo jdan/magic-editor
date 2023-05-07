@@ -98,18 +98,26 @@ interface ExtractionProps {
 export function Extraction(props: ExtractionProps) {
   const { annotated, date } = props;
 
-  let numMatches = 0;
-  const annotatedHtml = (annotated as string).replace(
-    /{{(.+?)}}/g,
-    (_, match) => {
-      if (numMatches > 0) {
-        return match;
-      }
-
-      numMatches++;
-      return `<span class="bg-blue-100 rounded-sm p-px">${match}</span>`;
+  const chunks = useMemo(() => {
+    const matches = annotated.match(/{{(.+?)}}/g);
+    if (!matches) {
+      return [];
     }
-  );
+
+    const chunks = annotated.split(/{{.+?}}/g);
+    return chunks.map((chunk, i) => {
+      return (
+        <span key={i} className="whitespace-pre-wrap">
+          {chunk}
+          {matches[i] && (
+            <span className="bg-blue-100 rounded-sm p-px">
+              {matches[i].slice(2, -2)}
+            </span>
+          )}
+        </span>
+      );
+    });
+  }, [annotated]);
 
   // date in the format Day of week, Month Day, Year
   const formattedString = new Date(date).toLocaleDateString("en-US", {
@@ -122,11 +130,7 @@ export function Extraction(props: ExtractionProps) {
   return (
     <>
       <div className="whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md">
-        <div
-          dangerouslySetInnerHTML={{
-            __html: annotatedHtml,
-          }}
-        />
+        {chunks}
       </div>
 
       <div className="relative group flex flex-col items-start gap-2 whitespace-pre-wrap w-full p-4 border border-gray-300 rounded-md">

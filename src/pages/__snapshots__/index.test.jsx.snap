@@ -118,12 +118,18 @@ exports[`Extraction matches snapshot 1`] = `
   <div
     className="whitespace-pre-wrap w-full min-h-[8rem] p-4 border border-gray-300 rounded-md"
   >
-    <div
-      dangerouslySetInnerHTML={
-        {
-          "__html": "stop by the post office <span class="bg-blue-100 rounded-sm p-px">wednesday</span>",
-        }
-      }
+    <span
+      className="whitespace-pre-wrap"
+    >
+      stop by the post office 
+      <span
+        className="bg-blue-100 rounded-sm p-px"
+      >
+        wednesday
+      </span>
+    </span>
+    <span
+      className="whitespace-pre-wrap"
     />
   </div>,
   <div
