@@ -130,6 +130,12 @@ exports[`Extraction matches snapshot 1`] = `
     </span>
     <span
       className="whitespace-pre-wrap"
+    >
+       at 
+      11pm
+    </span>
+    <span
+      className="whitespace-pre-wrap"
     />
   </div>,
   <div

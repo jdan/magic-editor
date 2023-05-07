@@ -21,7 +21,7 @@ describe("Extraction", () => {
     const tree = renderer
       .create(
         <Extraction
-          annotated="stop by the post office {{wednesday}}"
+          annotated="stop by the post office {{wednesday}} at {{11pm}}"
           date="2023/05/10"
         />
       )

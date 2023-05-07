@@ -116,11 +116,14 @@ export function Extraction(props: ExtractionProps) {
       return (
         <span key={i} className="whitespace-pre-wrap">
           {chunk}
-          {matches[i] && (
-            <span className="bg-blue-100 rounded-sm p-px">
-              {matches[i].slice(2, -2)}
-            </span>
-          )}
+          {matches[i] &&
+            (i === 0 ? (
+              <span className="bg-blue-100 rounded-sm p-px">
+                {matches[i].slice(2, -2)}
+              </span>
+            ) : (
+              matches[i].slice(2, -2)
+            ))}
         </span>
       );
     });
