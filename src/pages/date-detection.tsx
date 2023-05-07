@@ -2,8 +2,10 @@ import { useCallback, useMemo, useState } from "react";
 import { DetectionResponse } from "./api/date-detection";
 import { TextArea } from "@/components/TextArea";
 import { CopyButton } from "@/components/CopyButton";
+import Head from "next/head";
+import Link from "next/link";
 
-export default function App() {
+export default function DateDetection() {
   const [text, setText] = useState<string>("stop by the post office wednesday");
 
   const [response, setResponse] = useState<DetectionResponse>({
@@ -54,6 +56,10 @@ export default function App() {
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen py-2">
+      <Head>
+        <title>Date Detection</title>
+      </Head>
+
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-96">
         <TextArea value={text} onChange={setText} onKeyDown={handleKeyDown} />
 
